@@ -14,7 +14,8 @@ class ThinkForm extends StatefulWidget {
   final TextDirection? textDirection;
   final String? submitButtonText;
   final Widget? submitButtonTextWidget;
-  final Function (Map<String,dynamic>) callBack;
+  final Function (Map<String,dynamic>,bool) callBack;
+  final Map<String, dynamic>? initialValue;
   final int? crossAxisCount;
   const ThinkForm({
     Key? key,
@@ -23,7 +24,8 @@ class ThinkForm extends StatefulWidget {
     this.submitButtonText,
     this.submitButtonTextWidget,
     required this.callBack,
-    this.crossAxisCount})
+    this.crossAxisCount,
+    this.initialValue})
       : super(key: key);
 
   @override
@@ -46,7 +48,7 @@ class _ThinkFormState extends State<ThinkForm> {
               textDirection: widget.textDirection ?? TextDirection.ltr,
               child: FormBuilder(
                 key: _formKey,
-                initialValue: _formKey.currentState?.initialValue ?? {},
+                initialValue: widget.initialValue??(_formKey.currentState?.initialValue ?? {}),
                 child: Column(
                   children: [
                     AlignedGridView.count(
@@ -219,7 +221,7 @@ class _ThinkFormState extends State<ThinkForm> {
 
                                 _formKey.currentState?.validate();
                                 // debugPrint(_formKey.currentState?.instantValue.toString());
-                                widget.callBack(_formKey.currentState?.instantValue ?? {});
+                                widget.callBack(_formKey.currentState?.instantValue ?? {},_formKey.currentState?.isValid ?? false);
                               },
                               child: widget.submitButtonTextWidget ?? Text(widget.submitButtonText ?? 'Submit',
                                   style:
