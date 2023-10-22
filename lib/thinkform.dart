@@ -39,16 +39,23 @@ class _ThinkFormState extends State<ThinkForm> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.initialValue.toString());
+    if(widget.initialValue?.isNotEmpty ?? false){
+      _formKey.currentState?.patchValue(widget.initialValue ??{});
+    }
+
     return Scaffold(
       body: FutureBuilder(
         future: null,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          print("create form");
+
           return SingleChildScrollView(
             child: Directionality(
               textDirection: widget.textDirection ?? TextDirection.ltr,
               child: FormBuilder(
                 key: _formKey,
-                initialValue: widget.initialValue??(_formKey.currentState?.initialValue ?? {}),
+                // initialValue: widget.initialValue??(_formKey.currentState?.initialValue ?? {}),
                 child: Column(
                   children: [
                     AlignedGridView.count(
@@ -262,6 +269,7 @@ class _ThinkFormState extends State<ThinkForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    formWidgets = convertToWidgets(widget.items);
+    formWidgets = convertToWidgets(widget.items,_formKey);
+
   }
 }

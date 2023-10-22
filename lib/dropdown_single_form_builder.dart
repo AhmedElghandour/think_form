@@ -298,7 +298,7 @@ class FormBuilderDropdownSingleSelect<T> extends FormBuilderFieldDecoration<T> {
         // itemAsString: (item) => item.governorate ?? "",
         onChanged: state.enabled ? (T? value) => state.didChange(value) : null,
         selectedItem: hasValue ? field.value : null,
-        enabled: true,
+        enabled: state.enabled,
         dropdownButtonProps: const DropdownButtonProps(
           color: Colors.black,
           splashRadius: 0.1,

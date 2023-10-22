@@ -21,6 +21,7 @@ class ThinkFormModel {
   final String? attributeName;
   final String? datePickerFormat;
   final  Function? onUploadImage;
+  final bool? enabled;
 
   ThinkFormModel({
     required this.name,
@@ -36,6 +37,7 @@ class ThinkFormModel {
     this.attributeName,
     this.datePickerFormat,
     this.onUploadImage,
+    this.enabled,
   });
 }
 enum FieldType{
@@ -51,7 +53,7 @@ enum FieldType{
   phone
 }
 
-List<Widget> convertToWidgets(List<ThinkFormModel> items) {
+List<Widget> convertToWidgets(List<ThinkFormModel> items,GlobalKey<FormBuilderState> formKey) {
   List<Widget> widgets = [];
   for (var element in items) {
     element.textEditingController ??= TextEditingController();
@@ -73,7 +75,9 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
           FormBuilderTextField(
 
             name: element.attributeName ?? element.name,
+            enabled: element.enabled  ?? true,
             // restorationId: element.name,
+            onChanged: element.onChanged,
             controller: element.textEditingController,
             decoration: element.inputDecoration ?? InputDecoration(
               floatingLabelAlignment:
@@ -137,6 +141,8 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
 
             name: element.attributeName ?? element.name,
             // restorationId: element.name,
+            enabled: element.enabled  ?? true,
+            onChanged: element.onChanged,
             controller: element.textEditingController,
             decoration: element.inputDecoration ??InputDecoration(
               floatingLabelAlignment:
@@ -197,9 +203,10 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
             ),
           ),
           FormBuilderTextField(
-
             name: element.attributeName ?? element.name,
             // restorationId: element.name,
+            enabled: element.enabled  ?? true,
+            onChanged: element.onChanged,
             controller: element.textEditingController,
             decoration: element.inputDecoration ??InputDecoration(
               floatingLabelAlignment:
@@ -263,7 +270,8 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
             isDense: true,
             name: element.attributeName ?? element.name,
             searchable: element.dropDownSearchable,
-            // onChanged: element.onChanged,
+            onChanged: element.onChanged,
+            enabled: element.enabled  ?? true,
             // restorationId: element.name,
             decoration: element.inputDecoration ??InputDecoration(
               floatingLabelAlignment:
@@ -326,7 +334,9 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
           FormBuilderTextField(
             name: element.attributeName ?? element.name,
             // restorationId: element.name,
+            onChanged: element.onChanged,
             controller: element.textEditingController,
+            enabled: element.enabled  ?? true,
             decoration: element.inputDecoration ?? InputDecoration(
               floatingLabelAlignment:
               FloatingLabelAlignment.start,
@@ -393,7 +403,9 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
             name: element.attributeName ?? element.name,
             initialEntryMode: DatePickerEntryMode.calendarOnly,
             inputType: InputType.date,
+            enabled: element.enabled  ?? true,
             format: intl.DateFormat(element.datePickerFormat ?? 'dd-MM-yyyy'),
+            onChanged: element.onChanged,
             // restorationId: element.name,
             controller: element.textEditingController,
             decoration: element.inputDecoration ?? InputDecoration(
@@ -457,7 +469,9 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
 
             name: element.attributeName ?? element.name,
             // restorationId: element.name,
+            onChanged: element.onChanged,
             controller: element.textEditingController,
+            enabled: element.enabled  ?? true,
             decoration: element.inputDecoration ??InputDecoration(
               floatingLabelAlignment:
               FloatingLabelAlignment.start,
@@ -523,7 +537,9 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
             padding: const EdgeInsets.only(top: 14.0,bottom: 14.0),
             child: FormBuilderCheckbox(
               name: element.attributeName ?? element.name,
+              onChanged: element.onChanged,
               // restorationId: element.name,
+              enabled: element.enabled  ?? true,
               decoration: element.inputDecoration ??InputDecoration(
                 floatingLabelAlignment:
                 FloatingLabelAlignment.start,
@@ -594,7 +610,7 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: (!field.value.emptyValidator())
+                    onPressed: (!(element.enabled  ?? true)) ? null : (!field.value.emptyValidator() )
                         ? null
                         : () async {
                       var onUploadFunction = element.onUploadImage ??
@@ -660,6 +676,7 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
       ));
     }
     else if (element.type == FieldType.phone) {
+      // element.onChanged!(element.textEditingController?.text ?? "");
       widgets.add(Wrap(
         children: [
           Padding(
@@ -678,6 +695,8 @@ List<Widget> convertToWidgets(List<ThinkFormModel> items) {
 
             name: element.attributeName ?? element.name,
             // restorationId: element.name,
+            onChanged: element.onChanged,
+            enabled: element.enabled  ?? true,
             controller: element.textEditingController,
             decoration: element.inputDecoration ?? InputDecoration(
               // prefixText: "+20",
