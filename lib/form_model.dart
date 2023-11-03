@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:think_form/resources/adaptive.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import 'dropdown_multi_form_builder.dart';
 import 'dropdown_single_form_builder.dart';
 class ThinkFormBox{
   final List<ThinkFormModel>? items;
@@ -58,6 +59,7 @@ enum FieldType{
   password,
   normalText,
   dropdownSingleSelection,
+  dropdownMultiSelection,
   egyptianNationalID,
   datePicker,
   textNumberOnly,
@@ -388,6 +390,77 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
       ],
     ));
   }
+  else if (element.type == FieldType.dropdownMultiSelection) {
+
+    return (Wrap(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+              left: 8.0, right: 8, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(element.name),
+              if(element.required ?? false)const Text('*'),
+              const Text(':'),
+            ],
+          ),
+        ),
+
+        FormBuilderDropdownMultiSelect<String>(
+          initialValue: initializeValue[element.attributeName ?? element.name] ?? "",
+          isDense: true,
+          name: element.attributeName ?? element.name,
+          searchable: element.dropDownSearchable,
+          onChanged: element.onChanged,
+          enabled: element.enabled ?? true,
+          // restorationId: element.name,
+          decoration: element.inputDecoration ?? InputDecoration(
+            floatingLabelAlignment:
+            FloatingLabelAlignment.start,
+            hintText: element.hintText ?? element.name,
+            contentPadding:
+            const EdgeInsets.all(10),
+            errorText: null,
+            prefixIconConstraints:
+            const BoxConstraints(),
+            hintStyle: const TextStyle(
+                color: Color(0x30171725)),
+            filled: true,
+            isDense: true,
+            fillColor: Colors.grey.shade200,
+            border: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                    style: BorderStyle.none)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                    style: BorderStyle.none)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                    style: BorderStyle.none)),
+            disabledBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                    style: BorderStyle.none)),
+          ),
+          validator: FormBuilderValidators.compose([
+            if(element.required ?? false) FormBuilderValidators.required(
+                errorText: element.errorText),
+          ]),
+          items: element.dropDownListString?.map((e) =>
+              DropdownMenuItem<String>(value: e, child: Text(e),)).toList() ??
+              [],
+        ),
+      ],
+    ));
+  }
   else if (element.type == FieldType.egyptianNationalID) {
     element.textEditingController?.text =
         initializeValue[element.attributeName ?? element.name] ?? "";
@@ -604,20 +677,20 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     return (Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(
-        //       left: 8.0, right: 8, bottom: 8),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     children: [
-        //       Text(element.name),
-        //       if(element.required ?? false)const Text('*'),
-        //       const Text(':'),
-        //     ],
-        //   ),
-        // ),
         Padding(
-          padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
+          padding: const EdgeInsets.only(
+              left: 8.0, right: 8, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(""),
+              // if(element.required ?? false)const Text('*'),
+              // const Text(':'),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
           child: FormBuilderCheckbox(
             name: element.attributeName ?? element.name,
             onChanged: element.onChanged,
@@ -629,7 +702,7 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
               FloatingLabelAlignment.start,
               hintText: element.hintText ?? element.name,
               contentPadding:
-              const EdgeInsets.all(10),
+              const EdgeInsets.all(4),
               errorText: null,
               prefixIconConstraints:
               const BoxConstraints(),

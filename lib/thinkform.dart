@@ -278,6 +278,7 @@ class ThinkForm extends StatelessWidget {
   final TextDirection? textDirection;
   final String? submitButtonText;
   final Widget? submitButtonTextWidget;
+  final Color? buttonColor;
   final Function (Map<String,dynamic>,bool) callBack;
   final Map<String, dynamic>? initialValue;
    ThinkForm({
@@ -287,7 +288,8 @@ class ThinkForm extends StatelessWidget {
     this.submitButtonText,
     this.submitButtonTextWidget,
     required this.callBack,
-    this.initialValue})
+    this.initialValue,
+    this.buttonColor})
       : super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -316,8 +318,8 @@ class ThinkForm extends StatelessWidget {
                 key: _formKey,
                 // initialValue: initialValue?? {},
                 child: Column(
-                  children: formWidgets..add(Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: formWidgets..add(Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -337,7 +339,7 @@ class ThinkForm extends StatelessWidget {
                                 borderRadius:
                                 BorderRadius.circular(15),
                               ),
-                              backgroundColor:
+                              backgroundColor:buttonColor ??
                               const Color(0xff1c1c1a),
                             ),
                             onPressed: () {
