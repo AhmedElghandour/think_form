@@ -65,6 +65,7 @@ enum FieldType{
   textNumberOnly,
   checkBox,
   uploadImage,
+  uploadMultiImage,
   phone,
   empty,
   multiFields
@@ -835,6 +836,94 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
       ),
     ));
   }
+  else if (element.type == FieldType.uploadMultiImage) {
+    List<String> initialize = (List<String>.unmodifiable(initializeValue[element.attributeName ?? element.name]?? []));
+    return (Padding(
+      padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
+      child: FormBuilderField<List<String>>(
+        name: element.attributeName ?? element.name,
+        initialValue: initialize,
+        // restorationId: element.name,
+        // validator: FormBuilderValidators.compose([
+        //   if(element.required ?? false) FormBuilderValidators.required(errorText: element.errorText),
+        // ]),
+        builder: (FormFieldState<List<String>> field) {
+          return InputDecorator(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              // labelText: 'Terms',
+              errorText: field.errorText,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: (!(element.enabled ?? true)) ? null : (!field.value
+                      .emptyValidator())
+                      ? null
+                      : () async {
+                    var onUploadFunction = element.onUploadImage ??
+                            () async {
+                          await Future.delayed(Duration(seconds: 3));
+                          return [];
+                        };
+                    // field.didUpdateWidget(CircularProgressIndicator());
+                    field.didChange(["uploading"]);
+                    List<String> uploadLink = await onUploadFunction();
+                    field.didChange(uploadLink);
+                    // FilePicker.platform
+                    //     .pickFiles(type: FileType.image)
+                    //     .then((image) async {
+                    //   if (image != null) {
+                    //     String myId =
+                    //         "${nationalIdController.text}.${"backIdImage"}";
+                    //     Reference storageReference = FirebaseStorage
+                    //         .instance
+                    //         .ref()
+                    //         .child('user_media/idImages/$myId');
+                    //     await storageReference.putData(
+                    //         image.files.single.bytes ?? Uint8List(0));
+                    //
+                    //     photoLinkBack =
+                    //     await storageReference.getDownloadURL();
+                    //     setState(() {});
+                    //   }
+                    // });
+                  },
+                  icon: getButtonValidationListIcon(field.value),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: (!field.value.emptyValidator() &&
+                        !field.value!.contains("uploading"))
+                        ? Colors.green.shade200
+                        : Colors.grey.shade200,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    disabledBackgroundColor: (!field.value
+                        .emptyValidator() &&
+                        !field.value!.contains("uploading"))
+                        ? Colors.green.shade200
+                        : Colors.grey.shade200,),
+                  label: Text(
+                    element.name,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                getValidationMultiLink(field),
+
+              ],
+            ),
+          );
+        },
+        validator: (value) {
+          if ((value?.isEmpty ?? true) && (element.required ?? false)) {
+            return element.errorText ?? 'This field is required.';
+          }
+          return null;
+        },
+      ),
+    ));
+  }
   else if (element.type == FieldType.phone) {
     // element.onChanged!(element.textEditingController?.text ?? "");
     element.textEditingController?.text =
@@ -953,6 +1042,23 @@ Widget getButtonValidationIcon(String? value){
     return const Icon(Icons.done);
   }
 }
+Widget getButtonValidationListIcon(List<String>? value){
+  if(value.emptyValidator()){
+    return const Icon(Icons.upload);
+  }else if(value.toString().contains("uploading")){
+    return Container(
+      width: 24,
+      height: 24,
+      padding: const EdgeInsets.all(2.0),
+      child: const CircularProgressIndicator(
+        color: Colors.white,
+        strokeWidth: 3,
+      ),
+    );
+  }else{
+    return const Icon(Icons.done);
+  }
+}
 Widget getValidationLink(FormFieldState<String> field) {
   if (field.value.emptyValidator()) {
     return Container();
@@ -971,5 +1077,33 @@ Widget getValidationLink(FormFieldState<String> field) {
             style: TextStyle(color: Colors.green.shade200),
           )),
         ]);
+  }
+}
+
+Widget getValidationMultiLink(FormFieldState<List<String>> field) {
+  if (field.value.emptyValidator()) {
+    return Container();
+  } else if (field.value?.contains("uploading") ?? false) {
+    return const Text("Uploading", style: TextStyle(color: Colors.black),
+    );
+  } else {
+    return Column(
+
+      children: List.generate(field.value?.length ?? 0, (index) => Row(
+          children: [
+            IconButton(onPressed: () {
+              List<String>? values = List.from(field.value??[])..removeAt(index);
+              // if(values != null){
+              //   values.removeAt(index);
+              // }
+              field.didChange(values);
+            }, icon: const Icon(Icons.close, color: Colors.red,)),
+            TextButton(onPressed: () {
+              launchUrlString(field.value?[index].toString()??"");
+            }, child: Text("Uploaded Link ${index+1}",
+              style: TextStyle(color: Colors.green.shade200),
+            )),
+          ])),
+    );
   }
 }
