@@ -318,6 +318,7 @@ class ThinkForm extends StatelessWidget {
                 key: _formKey,
                 // initialValue: initialValue?? {},
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: formWidgets..add(Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [

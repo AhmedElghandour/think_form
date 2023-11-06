@@ -1088,22 +1088,23 @@ Widget getValidationMultiLink(FormFieldState<List<String>> field) {
     );
   } else {
     return Column(
-
-      children: List.generate(field.value?.length ?? 0, (index) => Row(
-          children: [
-            IconButton(onPressed: () {
-              List<String>? values = List.from(field.value??[])..removeAt(index);
-              // if(values != null){
-              //   values.removeAt(index);
-              // }
-              field.didChange(values);
-            }, icon: const Icon(Icons.close, color: Colors.red,)),
-            TextButton(onPressed: () {
-              launchUrlString(field.value?[index].toString()??"");
-            }, child: Text("Uploaded Link ${index+1}",
-              style: TextStyle(color: Colors.green.shade200),
-            )),
-          ])),
+      children: List.generate(field.value?.length ?? 0, (index) =>
+          Row(
+              children: [
+                IconButton(onPressed: () {
+                  List<String>? values = List.from(field.value ?? [])
+                    ..removeAt(index);
+                  // if(values != null){
+                  //   values.removeAt(index);
+                  // }
+                  field.didChange(values);
+                }, icon: const Icon(Icons.close, color: Colors.red,)),
+                TextButton(onPressed: () {
+                  launchUrlString(field.value?[index].toString() ?? "");
+                }, child: Text("Uploaded Link ${index + 1}",
+                  style: TextStyle(color: Colors.green.shade200),
+                )),
+              ])),
     );
   }
 }
