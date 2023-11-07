@@ -116,11 +116,12 @@ List<Widget> convertBoxToWidgets(List<ThinkFormBox> items,Map<String,dynamic> in
   }
   return widgets;
 }
-Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeValue) {
+Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeValue,) {
   element.textEditingController ??= TextEditingController();
   if (element.type == FieldType.email) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(
@@ -187,8 +188,9 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     ));
   }
   else if (element.type == FieldType.password) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(
@@ -254,8 +256,14 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     ));
   }
   else if (element.type == FieldType.normalText) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    // element.textEditingController?.text =
+    //     initializeValue[element.attributeName ?? element.name] ?? "";
+    // print(formKey.currentState?.value[element.attributeName ?? element.name]);
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
+    // element.textEditingController?.text =
+    //     initializeValue[element.attributeName ?? element.name] ??  "" ;
     return (Wrap(
       children: [
         Padding(
@@ -463,8 +471,9 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     ));
   }
   else if (element.type == FieldType.egyptianNationalID) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(
@@ -536,8 +545,9 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     ));
   }
   else if (element.type == FieldType.datePicker) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(
@@ -605,8 +615,9 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
     ));
   }
   else if (element.type == FieldType.textNumberOnly) {
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(
@@ -926,8 +937,9 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
   }
   else if (element.type == FieldType.phone) {
     // element.onChanged!(element.textEditingController?.text ?? "");
-    element.textEditingController?.text =
-        initializeValue[element.attributeName ?? element.name] ?? "";
+    if(initializeValue[element.attributeName ?? element.name] != null){
+      element.textEditingController?.text = initializeValue[element.attributeName ?? element.name];
+    }
     return (Wrap(
       children: [
         Padding(

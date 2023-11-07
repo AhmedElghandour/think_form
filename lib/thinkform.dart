@@ -289,11 +289,10 @@ class ThinkForm extends StatelessWidget {
     this.submitButtonTextWidget,
     required this.callBack,
     this.initialValue,
-     required this.formKey,
     this.buttonColor})
       : super(key: key);
 
-   final GlobalKey<FormBuilderState>? formKey;
+   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
 
   @override
@@ -349,9 +348,10 @@ class ThinkForm extends StatelessWidget {
                               // _formKey.currentState?.saveAndValidate();
                               // debugPrint(_formKey.currentState?.value.toString());
 
-                              formKey?.currentState?.validate();
+
+                              formKey.currentState?.validate();
                               // debugPrint(_formKey.currentState?.instantValue.toString());
-                              callBack(formKey?.currentState?.instantValue ?? {},formKey?.currentState?.isValid ?? false);
+                              callBack(formKey.currentState?.instantValue ?? {},formKey.currentState?.isValid ?? false);
                             },
                             child: submitButtonTextWidget ?? Text(submitButtonText ?? 'Submit',
                                 style:
