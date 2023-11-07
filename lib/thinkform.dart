@@ -289,10 +289,11 @@ class ThinkForm extends StatelessWidget {
     this.submitButtonTextWidget,
     required this.callBack,
     this.initialValue,
+     required this.formKey,
     this.buttonColor})
       : super(key: key);
 
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+   final GlobalKey<FormBuilderState>? formKey;
 
 
   @override
@@ -309,13 +310,13 @@ class ThinkForm extends StatelessWidget {
           // print("create form");
           final List<Widget> formWidgets = convertBoxToWidgets(itemsBox,initialValue ?? {},context);
           if(initialValue?.isNotEmpty ?? false){
-            _formKey.currentState?.patchValue(initialValue ??{});
+            formKey?.currentState?.patchValue(initialValue ??{});
           }
           return SingleChildScrollView(
             child: Directionality(
               textDirection: textDirection ?? TextDirection.ltr,
               child: FormBuilder(
-                key: _formKey,
+                key: formKey,
                 // initialValue: initialValue?? {},
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -348,9 +349,9 @@ class ThinkForm extends StatelessWidget {
                               // _formKey.currentState?.saveAndValidate();
                               // debugPrint(_formKey.currentState?.value.toString());
 
-                              _formKey.currentState?.validate();
+                              formKey?.currentState?.validate();
                               // debugPrint(_formKey.currentState?.instantValue.toString());
-                              callBack(_formKey.currentState?.instantValue ?? {},_formKey.currentState?.isValid ?? false);
+                              callBack(formKey?.currentState?.instantValue ?? {},formKey?.currentState?.isValid ?? false);
                             },
                             child: submitButtonTextWidget ?? Text(submitButtonText ?? 'Submit',
                                 style:
