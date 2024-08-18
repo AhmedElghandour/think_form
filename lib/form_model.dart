@@ -532,8 +532,8 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
           validator: FormBuilderValidators.compose([
             if(element.required ?? true) FormBuilderValidators.required(
                 errorText: element.errorText),
-            FormBuilderValidators.match(
-                r'^(2|3)[0-9][0-9][0-1][0-9][0-3][0-9](01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d\d\d\d\d',
+            FormBuilderValidators.match(RegExp(
+                r'^(2|3)[0-9][0-9][0-1][0-9][0-3][0-9](01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d\d\d\d\d'),
                 errorText: element.errorText),
           ]),
           inputFormatters: [
@@ -1010,7 +1010,7 @@ Widget convertWidgetItem(ThinkFormModel element,Map<String,dynamic> initializeVa
             if(element.required ?? true) FormBuilderValidators.required(
                 errorText: element.errorText),
             FormBuilderValidators.match(
-                r'^(1)[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]',
+                RegExp(r'^(1)[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
                 errorText: element.errorText)
             // FormBuilderValidators.p(errorText: element.errorText),
           ]),
