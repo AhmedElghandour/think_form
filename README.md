@@ -1,282 +1,97 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# think_form
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+## Overview
+think_form is a software project in the THINK workspace. This repository contains the source code, configuration, and delivery assets needed to build, test, and deploy the project.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## Objectives
+- Deliver stable, production-ready functionality for the `think_form` domain.
+- Maintain clear engineering standards for setup, testing, and deployment.
+- Support predictable release and incident handling workflows.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Technology Stack
+- Primary stack: Flutter / Dart
+- Source control: Git + GitHub
+- CI/CD: Project pipeline (configure per environment)
 
-## Features
+## Repository Structure
+- `lib/`: Project source directory.
+- `test/`: Project module directory.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Prerequisites
+- Git
+- Access to required secrets and environment variables
+- Platform SDKs/tooling based on project stack
 
-## Getting started
+## Local Setup
+1. Clone the repository.
+2. Copy `.env.example` to `.env` (or equivalent config file).
+3. Fill required environment values.
+4. Install dependencies and run locally.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-
-ThinkForm(
-initialValue: {
-  "MMM": "Ahmed",
-  "CCCEEE":true,
-  "CCC":"ahmed",
-  "nationalID": "no data"
-},
-textDirection: TextDirection.rtl,
-
-callBack: (value, isValid) {
-if (isValid) {
-AddVolunteerCubit.get(context).submitRequest(value);
-}
-// print(isValid.toString());
-print(value.toString());
-}, itemsBox: [
-ThinkFormBox(
-addTitle: false,
-// title: "Ahmed",
-crossAxisCount: 3,
-items: [
-ThinkFormModel(name: "الرقم القومي",
-type: FieldType.egyptianNationalID,
-errorText: "ليس صحيح",
-attributeName: "nationalId",
-enabled: true,
-required: true),
-ThinkFormModel(name: "الأسم",
-type: FieldType.normalText,
-errorText: "ليس صحيح",
-attributeName: "name",
-enabled: true,
-required: true),
-ThinkFormModel(name: "الحالة الإجتماعية",
-type: FieldType.dropdownSingleSelection,
-dropDownListString: ["اعزب", "متزوج", "أرمل"],
-errorText: "ليس صحيح",
-attributeName: "maritalSًtatus",
-enabled: true,
-required: true),
-ThinkFormModel(name: "المحافظة",
-type: FieldType.dropdownSingleSelection,
-dropDownListString: governorate.values.toList(),
-errorText: "ليس صحيح",
-attributeName: "governorates",
-enabled: true,
-required: true),
-ThinkFormModel(name: "الوظيفة",
-type: FieldType.normalText,
-errorText: "ليس صحيح",
-attributeName: "job",
-enabled: true,
-required: true),
-ThinkFormModel(name: "العنوان",
-type: FieldType.normalText,
-errorText: "ليس صحيح",
-attributeName: "address",
-enabled: true,
-required: true),
-ThinkFormModel(name: "البريد الإلكتروني",
-type: FieldType.email,
-errorText: "ليس صحيح",
-attributeName: "email",
-enabled: true,
-required: true),
-// ThinkFormModel(name: "جهة العمل",
-//     type: FieldType.normalText,
-//     errorText: "ليس صحيح",
-//     attributeName: "work",
-//     enabled: true,
-//     required: true),
-ThinkFormModel(name: "الديانة",
-type: FieldType.dropdownSingleSelection,
-errorText: "ليس صحيح",
-dropDownListString: religion,
-attributeName: "religion",
-enabled: true,
-required: true),
-ThinkFormModel(name: "رقم الهاتف",
-type: FieldType.phone,
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-attributeName: "phoneNumber"),
-ThinkFormModel(name: "موقف التجنيد",
-type: FieldType.dropdownSingleSelection,
-dropDownListString: [
-"إعفاء",
-"انهاء الخدمة العسكرية",
-"مؤجل",
-"لا ينطبق"
-],
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-attributeName: "militaryStatus"),
-ThinkFormModel(name: "الدوام",
-type: FieldType.dropdownSingleSelection,
-dropDownListString: ["جزئي", "كلي"],
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-attributeName: "typeOfWork"),
-]),
-ThinkFormBox(
-addTitle: false,
-crossAxisCount: 4,
-items: [
-ThinkFormModel(name: "صورة الشخصية",
-type: FieldType.uploadImage,
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-onUploadImage: ()async{
-FilePickerResult? result = await FilePicker.platform.pickFiles(
-type: FileType.image
-);
-
-if (result != null) {
-Uint8List? fileBytes = result.files.first.bytes;
-// String fileName = result.files.first.name;
-String? id  = FirebaseAuth.instance.currentUser?.uid;
-if(id != null){
-try {
-final Reference storageRef =
-FirebaseStorage.instance.ref().child('uploads/$id/personalImage');
-final UploadTask uploadTask = storageRef.putData(
-fileBytes!, SettableMetadata(contentType: result.files.first.extension));
-final TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() {});
-return await storageSnapshot.ref.getDownloadURL();
-} catch (error) {
-debugPrint('Error uploading image: $error');
-}
-// await FirebaseStorage.instance.ref('uploads/$id/personalImage').putData(fileBytes!);
-}
-// Upload file
-
-}
-},
-attributeName: "personalImage"),
-ThinkFormModel(name: "صورة البطاقة وجه",
-type: FieldType.uploadImage,
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-onUploadImage: ()async{
-FilePickerResult? result = await FilePicker.platform.pickFiles(
-type: FileType.image
-);
-
-if (result != null) {
-Uint8List? fileBytes = result.files.first.bytes;
-// String fileName = result.files.first.name;
-String? id  = FirebaseAuth.instance.currentUser?.uid;
-if(id != null){
-try {
-final Reference storageRef =
-FirebaseStorage.instance.ref().child('uploads/$id/nationalIdImageFace');
-final UploadTask uploadTask = storageRef.putData(
-fileBytes!, SettableMetadata(contentType: result.files.first.extension));
-final TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() {});
-return await storageSnapshot.ref.getDownloadURL();
-} catch (error) {
-debugPrint('Error uploading image: $error');
-}
-// await FirebaseStorage.instance.ref('uploads/$id/personalImage').putData(fileBytes!);
-}
-// Upload file
-
-}
-},
-attributeName: "nationalIdImageFace"),
-ThinkFormModel(name: "صورة البطاقة خلف",
-type: FieldType.uploadImage,
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-onUploadImage: ()async{
-FilePickerResult? result = await FilePicker.platform.pickFiles(
-type: FileType.image
-);
-
-if (result != null) {
-Uint8List? fileBytes = result.files.first.bytes;
-// String fileName = result.files.first.name;
-String? id  = FirebaseAuth.instance.currentUser?.uid;
-if(id != null){
-try {
-final Reference storageRef =
-FirebaseStorage.instance.ref().child('uploads/$id/nationalIdImageBack');
-final UploadTask uploadTask = storageRef.putData(
-fileBytes!, SettableMetadata(contentType: result.files.first.extension));
-final TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() {});
-return await storageSnapshot.ref.getDownloadURL();
-} catch (error) {
-debugPrint('Error uploading image: $error');
-}
-// await FirebaseStorage.instance.ref('uploads/$id/personalImage').putData(fileBytes!);
-}
-// Upload file
-
-}
-},
-attributeName: "nationalIdImageBack"),
-ThinkFormModel(name: "cv",
-type: FieldType.uploadImage,
-errorText: "ليس صحيح",
-enabled: true,
-required: true,
-onUploadImage: ()async{
-FilePickerResult? result = await FilePicker.platform.pickFiles(
-type: FileType.custom,
-allowedExtensions: ["pdf","docx"],
-);
-
-if (result != null) {
-Uint8List? fileBytes = result.files.first.bytes;
-// String fileName = result.files.first.name;
-String? id  = FirebaseAuth.instance.currentUser?.uid;
-if(id != null){
-try {
-final Reference storageRef =
-FirebaseStorage.instance.ref().child('uploads/$id/cv');
-final UploadTask uploadTask = storageRef.putData(
-fileBytes!, SettableMetadata(contentType: result.files.first.extension));
-final TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() {});
-return await storageSnapshot.ref.getDownloadURL();
-} catch (error) {
-return "error";
-debugPrint('Error uploading image: $error');
-}
-// await FirebaseStorage.instance.ref('uploads/$id/personalImage').putData(fileBytes!);
-}
-// Upload file
-
-}
-},
-attributeName: "cv"),
-]),
-
-
-],
-);
+### Run Locally
+```bash
+flutter pub get
+flutter run
 ```
 
-## Additional information
+### Build
+```bash
+flutter build apk --release
+# or
+flutter build ios --release
+```
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+### Test
+```bash
+flutter test
+```
+
+## Environment Variables
+Create a local environment file and define at minimum:
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `APP_ENV` | Yes | Runtime environment (`local`, `staging`, `production`). |
+| `API_BASE_URL` | Usually | Base URL for backend services. |
+| `AUTH_TOKEN` / `API_KEY` | If applicable | Service authentication secret. |
+| `SENTRY_DSN` | Optional | Error monitoring DSN. |
+
+Replace with project-specific variables before release.
+
+## Deployment Flow
+1. Open a feature branch and submit a pull request.
+2. Ensure lint, test, and build checks pass in CI.
+3. Merge to main branch after approval.
+4. Deploy to staging and run smoke tests.
+5. Promote to production after validation.
+6. Tag release and document changes.
+
+## Quality Gates
+- Lint and formatting checks pass.
+- Unit/integration tests pass.
+- Build artifacts are generated successfully.
+- Critical user flows validated in staging.
+
+## Troubleshooting
+- Clear dependency cache and reinstall packages if local build fails.
+- Verify environment variables are present and correct.
+- Check CI logs for failing step details.
+- Confirm API endpoints and credentials for target environment.
+
+## Security Notes
+- Never commit secrets (`.env`, keys, credentials).
+- Rotate tokens/keys when access changes.
+- Use least-privilege service credentials.
+
+## Contribution Guidelines
+1. Create small, focused pull requests.
+2. Include testing evidence in PR description.
+3. Update this README when setup or deployment changes.
+
+## Point of Contact
+- Lead Developer: TBD
+- Team: THINK Engineering
+- Escalation Channel: TBD
+
+## Changelog
+- 2026-05-10: README standardized and expanded for governance compliance.
